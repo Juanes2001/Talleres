@@ -32,7 +32,7 @@ void GPIO_Config (GPIO_Handler_t *pGPIOHandler){
 		RCC-> AHB1ENR |= (SET << RCC_AHB1ENR_GPIOA_EN);
 
 	}
-	//Verificamps àra GPIOB
+	//Verificamps para GPIOB
 	else if (pGPIOHandler->pGPIOx == GPIOB){
 			//Escribimos 1 (SET) en la posicion correspondiente al GPIOB
 			RCC-> AHB1ENR |= (SET << RCC_AHB1ENR_GPIOB_EN);
