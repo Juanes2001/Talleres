@@ -171,7 +171,7 @@ uint32_t GPIO_ReadPin (GPIO_Handler_t *pPinHandler){
 
 	// Cargamos el valor del registro IDR, Desplazado a derecha tantas veces como la ubicacion
 	// del pin especifico
-	pinValue= (pPinHandler -> pGPIOx->IDR >>pPinHandler -> GPIO_PinConfig.GPIO_PinNumber);
+	pinValue= (pPinHandler -> pGPIOx->IDR >> pPinHandler -> GPIO_PinConfig.GPIO_PinNumber);
 
 	return pinValue;
 }
