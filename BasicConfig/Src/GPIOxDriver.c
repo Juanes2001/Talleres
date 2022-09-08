@@ -32,7 +32,7 @@ void GPIO_Config (GPIO_Handler_t *pGPIOHandler){
 		RCC-> AHB1ENR |= (SET << RCC_AHB1ENR_GPIOAEN_Pos);
 
 	}
-	//Verificamps àra GPIOB
+	//Verificamps para GPIOB
 	else if (pGPIOHandler->pGPIOx == GPIOB){
 			//Escribimos 1 (SET) en la posicion correspondiente al GPIOB
 			RCC-> AHB1ENR |= (SET << RCC_AHB1ENR_GPIOBEN_Pos);
@@ -171,7 +171,7 @@ uint32_t GPIO_ReadPin (GPIO_Handler_t *pPinHandler){
 
 	// Cargamos el valor del registro IDR, Desplazado a derecha tantas veces como la ubicacion
 	// del pin especifico
-	pinValue= (pPinHandler -> pGPIOx->IDR >>pPinHandler -> GPIO_PinConfig.GPIO_PinNumber);
+	pinValue= (pPinHandler -> pGPIOx->IDR >> pPinHandler -> GPIO_PinConfig.GPIO_PinNumber);
 
 	return pinValue;
 }
