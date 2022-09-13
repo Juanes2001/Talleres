@@ -8,9 +8,7 @@
 
 #include <stdint.h>
 #include "GPIOxDriver.h"
-#include "GPIOxDriver.c"
 #include "BasicTimer.h"
-#include "BasicTimer.c"
 
 
 
