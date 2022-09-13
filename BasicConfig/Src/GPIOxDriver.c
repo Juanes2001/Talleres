@@ -175,5 +175,3 @@ uint32_t GPIO_ReadPin (GPIO_Handler_t *pPinHandler){
 
 	return pinValue;
 }
-
-

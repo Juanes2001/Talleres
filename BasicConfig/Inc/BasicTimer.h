@@ -2,7 +2,7 @@
  * BasicTimer.h
  *
  *  Created on: Apr 18, 2022
- *      Author: namontoy
+ *      Author: Juan Esteban Rodriguez Ochoa
  */
 
 #ifndef INC_BASICTIMER_H_
@@ -36,7 +36,7 @@ typedef struct
 }BasicTimer_Handler_t;
 
 void BasicTimer_Config(BasicTimer_Handler_t *ptrBTimerHandler);
-void BasicTimerX_Callback(void); /* Esta función debe ser sobre-escrita en el main para que el sistema funcione*/
+void BasicTimer2_Callback(void); /* Esta función debe ser sobre-escrita en el main para que el sistema funcione*/
 
 
 
