@@ -40,6 +40,14 @@ void BasicTimer_Config(BasicTimer_Handler_t *ptrBTimerHandler){
 		// Registro del RCC que nos activa la señal de reloj para el TIM3
 		RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
 	}
+	else if(ptrBTimerHandler->ptrTIMx == TIM4){
+		// Registro del RCC que nos activa la señal de reloj para el TIM4
+		RCC->APB1ENR |= RCC_APB1ENR_TIM4EN;
+	}
+	else if(ptrBTimerHandler->ptrTIMx == TIM5){
+		// Registro del RCC que nos activa la señal de reloj para el TIM5
+		RCC->APB1ENR |= RCC_APB1ENR_TIM5EN;
+	}
 	else{
 		__NOP();
 	}
@@ -68,6 +76,7 @@ void BasicTimer_Config(BasicTimer_Handler_t *ptrBTimerHandler){
 		/* 3a. Estamos en DOWN_Mode, el limite se carga en ARR (0) y se comienza en un valor alto
 		 * Trabaja contando en direccion descendente*/
 		/* Escriba codigo aca */
+		ptrBTimerHandler->ptrTIMx->CR1 |= TIM_CR1_DIR;
 
 		/* 3b. Configuramos el Auto-reload. Este es el "limite" hasta donde el CNT va a contar
 		 * En modo descendente, con numero positivos, cual es el minimi valor al que ARR puede llegar*/
@@ -93,6 +102,14 @@ void BasicTimer_Config(BasicTimer_Handler_t *ptrBTimerHandler){
 	else if(ptrBTimerHandler->ptrTIMx == TIM3){
 		// Activando en NVIC para la interrupción del TIM3
 		NVIC_EnableIRQ(TIM3_IRQn);
+	}
+	else if(ptrBTimerHandler->ptrTIMx == TIM4){
+		// Activando en NVIC para la interrupción del TIM3
+		NVIC_EnableIRQ(TIM4_IRQn);
+	}
+	else if(ptrBTimerHandler->ptrTIMx == TIM5){
+		// Activando en NVIC para la interrupción del TIM3
+		NVIC_EnableIRQ(TIM5_IRQn);
 	}
 	else{
 		__NOP();
