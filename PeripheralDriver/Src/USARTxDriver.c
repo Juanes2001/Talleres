@@ -109,12 +109,17 @@ void USART_Config(USART_Handler_t *ptrUsartHandler){
 
 	else if (ptrUsartHandler->USART_Config.USART_baudrate == USART_BAUDRATE_19200) {
 		// El valor a cargar es 52.0625 -> Mantiza = 52,fraction = 0.0625
-		// Mantiza = 52 = 0x34, fraction = 16 * 0.1875 = 1
-		// Escriba acá su código y los comentarios que faltan
+		// Mantiza = 52 = 0x34, fraction = 16 * 0.0625 = 1
+		//Configurando el Baudrate generator para una velocidad de 19200bps
+		ptrUsartHandler->ptrUSARTx->BRR = 0x0341;
 	}
 
 	else if(ptrUsartHandler->USART_Config.USART_baudrate == USART_BAUDRATE_115200){
-		// Escriba acá su código y los comentarios que faltan
+		// El valor a cargar es 8.6875 -> Mantiza = 8,fraction = 0.6875
+		// Mantiza = 8 = 0x8, fraction = 16 * 0.6875 = 11
+		//Configurando el Baudrate generator para una velocidad de 115200bps
+		ptrUsartHandler->ptrUSARTx->BRR = 0x08B;
+
 	}
 
 	// 2.6 Configuramos el modo: TX only, RX only, RXTX, disable
@@ -122,33 +127,32 @@ void USART_Config(USART_Handler_t *ptrUsartHandler){
 	case USART_MODE_TX:
 	{
 		// Activamos la parte del sistema encargada de enviar
-		// Escriba acá su código
+		ptrUsartHandler->ptrUSARTx->CR1 |= USART_CR1_TE;
 		break;
 	}
 	case USART_MODE_RX:
 	{
 		// Activamos la parte del sistema encargada de recibir
-		// Escriba acá su código
+		ptrUsartHandler->ptrUSARTx->CR1 |= USART_CR1_RE;
 		break;
 	}
 	case USART_MODE_RXTX:
 	{
 		// Activamos ambas partes, tanto transmision como recepcion
-		// Escriba acá su código
+		ptrUsartHandler->ptrUSARTx->CR1 |= (USART_CR1_TE | USART_CR1_RE);
 		break;
 	}
 	case USART_MODE_DISABLE:
 	{
 		// Desactivamos ambos canales
-		// Escriba acá su código
-		ptrUsartHandler->ptrUSARTx->CR1 &= ~USART_CR1_UE;
+		ptrUsartHandler->ptrUSARTx->CR1 &= ~(USART_CR1_TE | USART_CR1_RE);
 		break;
 	}
 	
 	default:
 	{
 		// Actuando por defecto, desactivamos ambos canales
-		ptrUsartHandler->ptrUSARTx->CR1 &= ~USART_CR1_RE;
+		ptrUsartHandler->ptrUSARTx->CR1 &= ~(USART_CR1_TE | USART_CR1_RE);
 		// Escriba acá su código
 		break;
 	}
@@ -156,7 +160,9 @@ void USART_Config(USART_Handler_t *ptrUsartHandler){
 
 	// 2.7 Activamos el modulo serial.
 	if(ptrUsartHandler->USART_Config.USART_mode != USART_MODE_DISABLE){
-		// Escriba acá su código
+		ptrUsartHandler->ptrUSARTx->CR1 |= USART_CR1_UE;
+	}else{
+		ptrUsartHandler->ptrUSARTx->CR1 &= ~USART_CR1_UE;
 	}
 }
 
@@ -166,7 +172,7 @@ int writeChar(USART_Handler_t *ptrUsartHandler, int dataToSend ){
 		__NOP();
 	}
 
-	// Escriba acá su código
+
 
 	return dataToSend;
 }
