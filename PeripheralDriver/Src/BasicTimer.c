@@ -104,11 +104,11 @@ void BasicTimer_Config(BasicTimer_Handler_t *ptrBTimerHandler){
 		NVIC_EnableIRQ(TIM3_IRQn);
 	}
 	else if(ptrBTimerHandler->ptrTIMx == TIM4){
-		// Activando en NVIC para la interrupción del TIM3
+		// Activando en NVIC para la interrupción del TIM4
 		NVIC_EnableIRQ(TIM4_IRQn);
 	}
 	else if(ptrBTimerHandler->ptrTIMx == TIM5){
-		// Activando en NVIC para la interrupción del TIM3
+		// Activando en NVIC para la interrupción del TIM5
 		NVIC_EnableIRQ(TIM5_IRQn);
 	}
 	else{
@@ -132,6 +132,18 @@ __attribute__((weak)) void BasicTimer3_Callback(void){
 	   */
 	__NOP();
 }
+__attribute__((weak)) void BasicTimer4_Callback(void){
+	  /* NOTE : This function should not be modified, when the callback is needed,
+	            the BasicTimerX_Callback could be implemented in the main file
+	   */
+	__NOP();
+}
+__attribute__((weak)) void BasicTimer5_Callback(void){
+	  /* NOTE : This function should not be modified, when the callback is needed,
+	            the BasicTimerX_Callback could be implemented in the main file
+	   */
+	__NOP();
+}
 
 
 /* Esta es la función a la que apunta el sistema en el vector de interrupciones.
@@ -144,6 +156,30 @@ void TIM2_IRQHandler(void){
 
 	/* LLamamos a la función que se debe encargar de hacer algo con esta interrupción*/
 	BasicTimer2_Callback();
+
+}
+void TIM3_IRQHandler(void){
+	/* Limpiamos la bandera que indica que la interrupción se ha generado */
+	TIM3->SR &= ~TIM_SR_UIF;
+
+	/* LLamamos a la función que se debe encargar de hacer algo con esta interrupción*/
+	BasicTimer3_Callback();
+
+}
+void TIM4_IRQHandler(void){
+	/* Limpiamos la bandera que indica que la interrupción se ha generado */
+	TIM4->SR &= ~TIM_SR_UIF;
+
+	/* LLamamos a la función que se debe encargar de hacer algo con esta interrupción*/
+	BasicTimer4_Callback();
+
+}
+void TIM5_IRQHandler(void){
+	/* Limpiamos la bandera que indica que la interrupción se ha generado */
+	TIM5->SR &= ~TIM_SR_UIF;
+
+	/* LLamamos a la función que se debe encargar de hacer algo con esta interrupción*/
+	BasicTimer5_Callback();
 
 }
 
