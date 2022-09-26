@@ -40,6 +40,14 @@ void BasicTimer_Config(BasicTimer_Handler_t *ptrBTimerHandler){
 		// Registro del RCC que nos activa la señal de reloj para el TIM3
 		RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
 	}
+	else if(ptrBTimerHandler->ptrTIMx == TIM4){
+		// Registro del RCC que nos activa la señal de reloj para el TIM4
+		RCC->APB1ENR |= RCC_APB1ENR_TIM4EN;
+	}
+	else if(ptrBTimerHandler->ptrTIMx == TIM5){
+		// Registro del RCC que nos activa la señal de reloj para el TIM5
+		RCC->APB1ENR |= RCC_APB1ENR_TIM5EN;
+	}
 	else{
 		__NOP();
 	}
@@ -68,6 +76,7 @@ void BasicTimer_Config(BasicTimer_Handler_t *ptrBTimerHandler){
 		/* 3a. Estamos en DOWN_Mode, el limite se carga en ARR (0) y se comienza en un valor alto
 		 * Trabaja contando en direccion descendente*/
 		/* Escriba codigo aca */
+		ptrBTimerHandler->ptrTIMx->CR1 |= TIM_CR1_DIR;
 
 		/* 3b. Configuramos el Auto-reload. Este es el "limite" hasta donde el CNT va a contar
 		 * En modo descendente, con numero positivos, cual es el minimi valor al que ARR puede llegar*/
@@ -94,6 +103,14 @@ void BasicTimer_Config(BasicTimer_Handler_t *ptrBTimerHandler){
 		// Activando en NVIC para la interrupción del TIM3
 		NVIC_EnableIRQ(TIM3_IRQn);
 	}
+	else if(ptrBTimerHandler->ptrTIMx == TIM4){
+		// Activando en NVIC para la interrupción del TIM4
+		NVIC_EnableIRQ(TIM4_IRQn);
+	}
+	else if(ptrBTimerHandler->ptrTIMx == TIM5){
+		// Activando en NVIC para la interrupción del TIM5
+		NVIC_EnableIRQ(TIM5_IRQn);
+	}
 	else{
 		__NOP();
 	}
@@ -115,6 +132,18 @@ __attribute__((weak)) void BasicTimer3_Callback(void){
 	   */
 	__NOP();
 }
+__attribute__((weak)) void BasicTimer4_Callback(void){
+	  /* NOTE : This function should not be modified, when the callback is needed,
+	            the BasicTimerX_Callback could be implemented in the main file
+	   */
+	__NOP();
+}
+__attribute__((weak)) void BasicTimer5_Callback(void){
+	  /* NOTE : This function should not be modified, when the callback is needed,
+	            the BasicTimerX_Callback could be implemented in the main file
+	   */
+	__NOP();
+}
 
 
 /* Esta es la función a la que apunta el sistema en el vector de interrupciones.
@@ -127,6 +156,30 @@ void TIM2_IRQHandler(void){
 
 	/* LLamamos a la función que se debe encargar de hacer algo con esta interrupción*/
 	BasicTimer2_Callback();
+
+}
+void TIM3_IRQHandler(void){
+	/* Limpiamos la bandera que indica que la interrupción se ha generado */
+	TIM3->SR &= ~TIM_SR_UIF;
+
+	/* LLamamos a la función que se debe encargar de hacer algo con esta interrupción*/
+	BasicTimer3_Callback();
+
+}
+void TIM4_IRQHandler(void){
+	/* Limpiamos la bandera que indica que la interrupción se ha generado */
+	TIM4->SR &= ~TIM_SR_UIF;
+
+	/* LLamamos a la función que se debe encargar de hacer algo con esta interrupción*/
+	BasicTimer4_Callback();
+
+}
+void TIM5_IRQHandler(void){
+	/* Limpiamos la bandera que indica que la interrupción se ha generado */
+	TIM5->SR &= ~TIM_SR_UIF;
+
+	/* LLamamos a la función que se debe encargar de hacer algo con esta interrupción*/
+	BasicTimer5_Callback();
 
 }
 
