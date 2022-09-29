@@ -9,6 +9,7 @@
 #include <stdint.h>
 #include "GPIOxDriver.h"
 #include "BasicTimer.h"
+#include "USARTxDriver.h"
 
 
 
