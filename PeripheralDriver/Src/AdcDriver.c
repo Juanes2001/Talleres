@@ -28,58 +28,56 @@ void adc_Config(ADC_Config_t *adcConfig){
 	switch(adcConfig->resolution){
 	case ADC_RESOLUTION_12_BIT:
 	{
-		adcConfig->resolution |=
+		ADC1->CR1 &= ~ADC_CR1_RES;
 
 		break;
 	}
 
 	case ADC_RESOLUTION_10_BIT:
 	{
-		// Escriba su código acá
-		// Escriba su código acá
+		ADC1->CR1 |= ADC_CR1_RES_0;
 		break;
 	}
 
 	case ADC_RESOLUTION_8_BIT:
 	{
-		// Escriba su código acá
-		// Escriba su código acá
+
+		ADC1->CR1 |= ADC_CR1_RES_1;
 		break;
 	}
 
 	case ADC_RESOLUTION_6_BIT:
 	{
-		ADC1->CR1 |= ADC_CR1_RES_0;
-		ADC1->CR1 |= ADC_CR1_RES_1;
+		ADC1->CR1 |= ADC_CR1_RES;
 		break;
 	}
 
 	default:
-	{
+	{	ADC1->CR1 |= ADC_CR1_RES;
 		break;
 	}
 	}
 
 	/* 4. Configuramos el modo Scan como desactivado */
-	// Escriba su código acá
+	ADC1->CR1 &= ~ADC_CR1_SCAN;
 
 	/* 5. Configuramos la alineación de los datos (derecha o izquierda) */
 	if(adcConfig->dataAlignment == ADC_ALIGNMENT_RIGHT){
 		// Alineación a la derecha (esta es la forma "natural")
-		// Escriba su código acá
+		ADC1->CR2 &= ~ADC_CR2_ALIGN;
 	}
 	else{
 
 		// Alineación a la izquierda (para algunos cálculos matemáticos)
-		// Escriba su código acá
+		ADC1->CR2 |= ADC_CR2_ALIGN;
 	}
 
 	/* 6. Desactivamos el "continuos mode" */
-	// Escriba su código acá
+	ADC1->CR2 &= ~ADC_CR2_CONT;
 
 	/* 7. Acá se debería configurar el sampling...*/
 	if(adcConfig->channel < ADC_CHANNEL_9){
-		// Escriba su código acá
+	 // escriba aqui su codigo
 	}
 	else{
 		// Escriba su código acá
@@ -96,10 +94,10 @@ void adc_Config(ADC_Config_t *adcConfig){
 	ADC->CCR |= ADC_CCR_ADCPRE_0;
 
 	/* 10. Desactivamos las interrupciones globales */
-	// Escriba su código acá
+	__disable_irq();
 
 	/* 11. Activamos la interrupción debida a la finalización de una conversión EOC (CR1)*/
-	// Escriba su código acá
+	ADC1->CR2 |= ADC_CR1_EOCIE;
 
 	/* 11a. Matriculamos la interrupción en el NVIC*/
 	// Escriba su código acá
@@ -111,7 +109,7 @@ void adc_Config(ADC_Config_t *adcConfig){
 	// Escriba su código acá
 
 	/* 13. Activamos las interrupciones globales */
-	// Escriba su código acá
+	__enable_irq();
 }
 
 /*
@@ -123,13 +121,13 @@ void adc_Config(ADC_Config_t *adcConfig){
  * */
 void startSingleADC(void){
 	/* Desactivamos el modo continuo de ADC */
-	// Escriba su código acá
+	ADC1->CR2 &= ~ADC_CR2_CONT;
 	
 	/* Limpiamos el bit del overrun (CR1) */
-	// Escriba su código acá
+	ADC1->CR1 &= ~ADC_CR1_OVRIE;
 	
 	/* Iniciamos un ciclo de conversión ADC (CR2)*/
-	// Escriba su código acá
+	ADC1->CR2 |= ADC_CR2_SWSTART;
 
 }
 
@@ -143,10 +141,10 @@ void startSingleADC(void){
 void startContinousADC(void){
 
 	/* Activamos el modo continuo de ADC */
-	// Escriba su código acá
+	ADC1->CR2 |= ADC_CR2_CONT;
 
 	/* Iniciamos un ciclo de conversión ADC */
-	// Escriba su código acá
+	ADC1->CR2 |= ADC_CR2_SWSTART;
 
 }
 
@@ -169,7 +167,8 @@ void ADC_IRQHandler(void){
 	if(ADC1->SR & ADC_SR_EOC){
 		// Leemos el resultado de la conversión ADC y lo cargamos en una variale auxiliar
 		// la cual es utilizada en la función getADC()
-		// Escriba su código acá
+
+
 
 		// Hacemos el llamado a la función que se ejecutará en el main
 		adcComplete_Callback();
@@ -204,41 +203,49 @@ void configAnalogPin(uint8_t adcChannel) {
 
 	case ADC_CHANNEL_1: {
 		// Buscar y configurar adecuadamente
+		handlerAdcPin.pGPIOx 						= GPIOA;
+		handlerAdcPin.GPIO_PinConfig.GPIO_PinNumber = PIN_1;
 
 		break;
 	}
 
 	case ADC_CHANNEL_2: {
 		// Buscar y configurar adecuadamente
-
+		handlerAdcPin.pGPIOx 						= GPIOA;
+		handlerAdcPin.GPIO_PinConfig.GPIO_PinNumber = PIN_2;
 		break;
 	}
 
 	case ADC_CHANNEL_3: {
 		// Buscar y configurar adecuadamente
-
+		handlerAdcPin.pGPIOx 						= GPIOA;
+		handlerAdcPin.GPIO_PinConfig.GPIO_PinNumber = PIN_3;
 		break;
 	}
 
 	case ADC_CHANNEL_4: {
 		// Buscar y configurar adecuadamente
-
+		handlerAdcPin.pGPIOx 						= GPIOA;
+		handlerAdcPin.GPIO_PinConfig.GPIO_PinNumber = PIN_4;
 		break;
 	}
 
 	case ADC_CHANNEL_5: {
 		// Buscar y configurar adecuadamente
-		
+		handlerAdcPin.pGPIOx 						= GPIOA;
+		handlerAdcPin.GPIO_PinConfig.GPIO_PinNumber = PIN_5;
 		break;
 	}
 	case ADC_CHANNEL_6: {
 		// Buscar y configurar adecuadamente
-		
+		handlerAdcPin.pGPIOx 						= GPIOA;
+		handlerAdcPin.GPIO_PinConfig.GPIO_PinNumber = PIN_6;
 		break;
 	}
 	case ADC_CHANNEL_7: {
 		// Buscar y configurar adecuadamente
-		
+		handlerAdcPin.pGPIOx 						= GPIOA;
+		handlerAdcPin.GPIO_PinConfig.GPIO_PinNumber = PIN_7;
 		break;
 	}
 	case ADC_CHANNEL_8: {
@@ -249,37 +256,44 @@ void configAnalogPin(uint8_t adcChannel) {
 	}
 	case ADC_CHANNEL_9: {
 		// Buscar y configurar adecuadamente
-		
+		handlerAdcPin.pGPIOx 						= GPIOB;
+		handlerAdcPin.GPIO_PinConfig.GPIO_PinNumber = PIN_1;
 		break;
 	}
 	case ADC_CHANNEL_10: {
 		// Buscar y configurar adecuadamente
-		
+		handlerAdcPin.pGPIOx 						= GPIOC;
+		handlerAdcPin.GPIO_PinConfig.GPIO_PinNumber = PIN_0;
 		break;
 	}
 	case ADC_CHANNEL_11: {
 		// Buscar y configurar adecuadamente
-		
+		handlerAdcPin.pGPIOx 						= GPIOC;
+		handlerAdcPin.GPIO_PinConfig.GPIO_PinNumber = PIN_1;
 		break;
 	}
 	case ADC_CHANNEL_12: {
 		// Buscar y configurar adecuadamente
-		
+		handlerAdcPin.pGPIOx 						= GPIOA;
+		handlerAdcPin.GPIO_PinConfig.GPIO_PinNumber = PIN_2;
 		break;
 	}
 	case ADC_CHANNEL_13: {
 		// Buscar y configurar adecuadamente
-		
+		handlerAdcPin.pGPIOx 						= GPIOC;
+		handlerAdcPin.GPIO_PinConfig.GPIO_PinNumber = PIN_3;
 		break;
 	}
 	case ADC_CHANNEL_14: {
 		// Buscar y configurar adecuadamente
-		
+		handlerAdcPin.pGPIOx 						= GPIOC;
+		handlerAdcPin.GPIO_PinConfig.GPIO_PinNumber = PIN_4;
 		break;
 	}
 	case ADC_CHANNEL_15: {
 		// Buscar y configurar adecuadamente
-		
+		handlerAdcPin.pGPIOx 						= GPIOC;
+		handlerAdcPin.GPIO_PinConfig.GPIO_PinNumber = PIN_5;
 		break;
 	}
 	default: {
