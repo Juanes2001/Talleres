@@ -76,11 +76,11 @@ void adc_Config(ADC_Config_t *adcConfig){
 	ADC1->CR2 &= ~ADC_CR2_CONT;
 
 	/* 7. Acá se debería configurar el sampling...*/
-	if(adcConfig->channel < ADC_CHANNEL_9){
-	 // escriba aqui su codigo
+	if(adcConfig->channel <= ADC_CHANNEL_9){
+		ADC1->SMPR2 |= (adcConfig->samplingPeriod) << (0x3 * adcConfig->channel);
 	}
 	else{
-		// Escriba su código acá
+		ADC1->SMPR1 |= (adcConfig->samplingPeriod) << (0x3 * adcConfig->channel);
 	}
 
 	/* 8. Configuramos la secuencia y cuantos elementos hay en la secuencia */
@@ -97,16 +97,16 @@ void adc_Config(ADC_Config_t *adcConfig){
 	__disable_irq();
 
 	/* 11. Activamos la interrupción debida a la finalización de una conversión EOC (CR1)*/
-	ADC1->CR2 |= ADC_CR1_EOCIE;
+	ADC1->CR1 |= ADC_CR1_EOCIE;
 
 	/* 11a. Matriculamos la interrupción en el NVIC*/
-	// Escriba su código acá
+	__NVIC_EnableIRQ(ADC_IRQn);
 	
 	/* 11b. Configuramos la prioridad para la interrupción ADC */
-	// Escriba su código acá
+	__NVIC_SetPriority(ADC_IRQn, 4);
 
 	/* 12. Activamos el modulo ADC */
-	// Escriba su código acá
+	ADC1->CR2 |= ADC_CR2_ADON;
 
 	/* 13. Activamos las interrupciones globales */
 	__enable_irq();
@@ -167,6 +167,7 @@ void ADC_IRQHandler(void){
 	if(ADC1->SR & ADC_SR_EOC){
 		// Leemos el resultado de la conversión ADC y lo cargamos en una variale auxiliar
 		// la cual es utilizada en la función getADC()
+		adcRawData = ADC1->DR;
 
 
 

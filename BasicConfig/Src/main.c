@@ -10,6 +10,7 @@
 #include "GPIOxDriver.h"
 #include "BasicTimer.h"
 #include "USARTxDriver.h"
+#include "ADCDriver.h"
 
 
 
