@@ -68,7 +68,8 @@ int main(void) {
 				// ****** // ESCRIBA AQUI SU CODIGO // ****** //
 
 				// Función SprintF
-
+				sprintf(bufferData, "%u" ,numeroGrande);
+				writeMsg (&handlerUsart2,bufferData);
 				}
 
 
@@ -141,7 +142,7 @@ void InitSystem(void){
 	BasicTimer_Config(&handlerStateTimer);
 
 	// Activamos el TIM2
-	//startTimer(&handlerStateTimer);
+	startTimer(&handlerStateTimer);
 
 }
 

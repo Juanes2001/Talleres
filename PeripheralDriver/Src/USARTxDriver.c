@@ -176,3 +176,52 @@ int writeChar(USART_Handler_t *ptrUsartHandler, int dataToSend ){
 	return dataToSend;
 }
 
+
+void writeMsg(USART_Handler_t *ptrUsartHandler, char *msgToSend){
+
+	while(*msgToSend != '\0'){
+		writeChar(ptrUsartHandler, *msgToSend);
+		msgToSend ++ ;
+	}
+}
+
+__attribute__((weak))	void usart2Rx_Callback(void){
+	__NOP();
+}
+__attribute__((weak))	void usart1Rx_Callback(void){
+	__NOP();
+}
+__attribute__((weak))	void usart6Rx_Callback(void){
+	__NOP();
+}
+
+uint8_t auxRxData = 0;
+
+uint8_t getRxData(void){
+	return auxRxData;
+}
+
+void USART2_IRQHandler(void){
+
+	if(USART2->SR & USART_SR_RXNE){
+		auxRxData = (uint8_t) USART2->DR;
+		usart2Rx_Callback();
+	}
+}
+
+void USART1_IRQHandler(void){
+
+	if(USART1->SR & USART_SR_RXNE){
+		auxRxData = (uint8_t) USART1->DR;
+		usart1Rx_Callback();
+	}
+}
+
+void USART6_IRQHandler(void){
+
+	if(USART6->SR & USART_SR_RXNE){
+		auxRxData = (uint8_t) USART6->DR;
+		usart6Rx_Callback();
+	}
+}
+

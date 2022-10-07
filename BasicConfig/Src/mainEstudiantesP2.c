@@ -43,7 +43,7 @@ char bufferData[64];
 
 // Variables ADC
 
-uint16_t adcValue;
+uint16_t adcValue = 0;
 uint8_t adcIsComplete = RESET;
 
 /* Definición de prototipos de funciones */
@@ -73,13 +73,13 @@ int main(void) {
 			// Iniciamos muestreo del ADC
 			if(rxData == 'c'){
 				// Activamos el TIM4
-
+				startTimer (&handlerAdcTimer);
 				// ****** // ESCRIBA AQUI SU CODIGO // ****** //
 			}
 			// Paramos muestreo del ADC
 			else if(rxData == 'p'){
 				// Desactivamos el TIM4
-
+				stopTimer (&handlerAdcTimer);
 				// ****** // ESCRIBA AQUI SU CODIGO // ****** //
 			}
 			rxData = '\0';
@@ -88,7 +88,8 @@ int main(void) {
 		// Mandamos los valores de la conversion ADC
 		if(adcIsComplete == SET){
 			// Seccionamos el valor en un arreglo
-
+			sprintf(bufferData, "%u \n", adcValue);
+			writeMsg(&handlerUsart2,bufferData);a
 			// ****** // ESCRIBA AQUI SU CODIGO // ****** //
 
 			// Enviamos el dato del ADC resultante
