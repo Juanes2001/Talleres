@@ -175,3 +175,4 @@ int writeChar(USART_Handler_t *ptrUsartHandler, int dataToSend ){
 
 	return dataToSend;
 }
+
