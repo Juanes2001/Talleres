@@ -15,11 +15,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#include "stm32f4xx.h"
 #include "GPIOxDriver.h"
 #include "BasicTimer.h"
-#include "USARTxDriver.h"
 #include "AdcDriver.h"
+#include "USARTxDriver.h"
 
 
 // Definicion de los handlers necesarios
@@ -69,7 +68,7 @@ int main(void) {
 
 				// Función SprintF
 				sprintf(bufferData, "%u" ,numeroGrande);
-				writeMsg (&handlerUsart2,bufferData);
+				writeMsg(&handlerUsart2,bufferData);
 				}
 
 
@@ -127,7 +126,7 @@ void InitSystem(void){
 	handlerUsart2.USART_Config.USART_parity		= USART_PARITY_NONE;
 	handlerUsart2.USART_Config.USART_stopbits	= USART_STOPBIT_1;
 	handlerUsart2.USART_Config.USART_mode		= USART_MODE_RXTX;
-	handlerUsart2.USART_Config.USART_interrupt	= USART_INTERRUPT_RX_ENABLE;
+	handlerUsart2.USART_Config.USART_enableInRx = USART_INTERRUPT_RX_ENABLE;
 
 	// Cargamos la configuración del USART
 	USART_Config(&handlerUsart2);

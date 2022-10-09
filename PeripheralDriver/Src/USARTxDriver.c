@@ -14,11 +14,17 @@
  * del periferico que se está utilizando.
  */
 void USART_Config(USART_Handler_t *ptrUsartHandler){
+
+	__disable_irq();
+
 	/* 1. Activamos la señal de reloj que viene desde el BUS al que pertenece el periferico */
 	/* Lo debemos hacer para cada uno de las posibles opciones que tengamos (USART1, USART2, USART6) */
     /* 1.1 Configuramos el USART1 */
 	if(ptrUsartHandler->ptrUSARTx == USART1){
 		RCC->APB2ENR |= RCC_APB2ENR_USART1EN;
+	}
+	else if(ptrUsartHandler->ptrUSARTx == USART2){
+		RCC->APB1ENR |= RCC_APB1ENR_USART2EN;
 	}
 	
     /* 1.2 Configuramos el USART6 */
@@ -163,6 +169,31 @@ void USART_Config(USART_Handler_t *ptrUsartHandler){
 	}else{
 		ptrUsartHandler->ptrUSARTx->CR1 &= ~USART_CR1_UE;
 	}
+
+	//Habilitamos las interrupciones de recepcion RXNEIE
+	if (ptrUsartHandler->USART_Config.USART_enableInRx == USART_INTERRUPT_RX_ENABLE){
+		ptrUsartHandler->ptrUSARTx->CR1 |= USART_CR1_RXNEIE;
+
+		if(ptrUsartHandler->ptrUSARTx == USART1){
+					// Activando en NVIC para la interrupción del USART1
+					__NVIC_EnableIRQ(USART1_IRQn);
+		}
+		else if(ptrUsartHandler->ptrUSARTx == USART2){
+					// Activando en NVIC para la interrupción del USART2
+					__NVIC_EnableIRQ(USART2_IRQn);
+		}
+		else if(ptrUsartHandler->ptrUSARTx == USART6){
+				// Activando en NVIC para la interrupción del USART6
+					__NVIC_EnableIRQ(USART6_IRQn);
+		}
+		else{
+				__NOP();
+		}
+	}else{
+		ptrUsartHandler->ptrUSARTx->CR1 &= ~USART_CR1_RXNEIE;
+	}
+
+	__enable_irq();
 }
 
 /* funcion para escribir un solo char */
@@ -215,6 +246,7 @@ void USART1_IRQHandler(void){
 		auxRxData = (uint8_t) USART1->DR;
 		usart1Rx_Callback();
 	}
+
 }
 
 void USART6_IRQHandler(void){
