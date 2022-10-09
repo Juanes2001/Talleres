@@ -21,6 +21,7 @@
 #include "USARTxDriver.h"
 
 
+
 // Definicion de los handlers necesarios
 GPIO_Handler_t handlerStateLed = {0};
 GPIO_Handler_t handlerPinTx		= {0};

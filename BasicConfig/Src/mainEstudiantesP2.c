@@ -74,13 +74,11 @@ int main(void) {
 			if(rxData == 'c'){
 				// Activamos el TIM4
 				startTimer (&handlerAdcTimer);
-				// ****** // ESCRIBA AQUI SU CODIGO // ****** //
 			}
 			// Paramos muestreo del ADC
 			else if(rxData == 'p'){
 				// Desactivamos el TIM4
 				stopTimer (&handlerAdcTimer);
-				// ****** // ESCRIBA AQUI SU CODIGO // ****** //
 			}
 			rxData = '\0';
 		}
@@ -89,16 +87,15 @@ int main(void) {
 		if(adcIsComplete == SET){
 			// Seccionamos el valor en un arreglo
 			sprintf(bufferData, "%u \n", adcValue);
-			writeMsg(&handlerUsart2,bufferData);
-			// ****** // ESCRIBA AQUI SU CODIGO // ****** //
+
 
 			// Enviamos el dato del ADC resultante
 
-			// ****** // ESCRIBA AQUI SU CODIGO // ****** //
+			writeMsg(&handlerUsart2,bufferData);
 
 			// Bajamos la bandera
 
-			// ****** // ESCRIBA AQUI SU CODIGO // ****** //
+			adcIsComplete = RESET;
 		}
 	}
 
@@ -166,7 +163,7 @@ void InitSystem(void){
 	BasicTimer_Config(&handlerStateTimer);
 
 	// Activamos el TIM2
-	//startTimer(&handlerStateTimer);
+	startTimer(&handlerStateTimer);
 
 	// Configuramos el timer del ADC
 	handlerAdcTimer.ptrTIMx						= TIM4;

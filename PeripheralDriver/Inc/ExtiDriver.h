@@ -38,5 +38,12 @@ void callback_extInt12(void);
 void callback_extInt13(void);
 void callback_extInt14(void);
 void callback_extInt15(void);
+void EXTI0_IRQHandler(void);
+void EXTI1_IRQHandler(void);
+void EXTI2_IRQHandler(void);
+void EXTI3_IRQHandler(void);
+void EXTI4_IRQHandler(void);
+void EXTI9_5_IRQHandler(void);
+void EXTI15_10_IRQHandler(void);
 
 #endif /* EXTIDRIVER_H_ */
