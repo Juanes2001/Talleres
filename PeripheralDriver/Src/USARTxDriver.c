@@ -54,10 +54,12 @@ void USART_Config(USART_Handler_t *ptrUsartHandler){
 		if(ptrUsartHandler->USART_Config.USART_parity == USART_PARITY_EVEN){
 			// Es even, entonces cargamos la configuracion adecuada
 			ptrUsartHandler->ptrUSARTx->CR1 &= ~USART_CR1_PS;
+			ptrUsartHandler->ptrUSARTx->CR1 |= USART_CR1_PEIE;
 			
 		}else{
 			// Si es "else" significa que la paridad seleccionada es ODD, y cargamos esta configuracion
 			ptrUsartHandler->ptrUSARTx->CR1 |= USART_CR1_PS;
+			ptrUsartHandler->ptrUSARTx->CR1 |= USART_CR1_PEIE;
 		}
 	}else{
 		// Si llegamos aca, es porque no deseamos tener el parity-check
@@ -115,9 +117,17 @@ void USART_Config(USART_Handler_t *ptrUsartHandler){
 
 	else if (ptrUsartHandler->USART_Config.USART_baudrate == USART_BAUDRATE_19200) {
 		// El valor a cargar es 52.0625 -> Mantiza = 52,fraction = 0.0625
-		// Mantiza = 52 = 0x34, fraction = 16 * 0.0625 = 1
+		// Mantiza = 52 = 0x34, fraction = 16 * 0.0 = 1
 		//Configurando el Baudrate generator para una velocidad de 19200bps
 		ptrUsartHandler->ptrUSARTx->BRR = 0x0341;
+	}
+
+	else if(ptrUsartHandler->USART_Config.USART_baudrate == USART_BAUDRATE_28800){
+		// El valor a cargar es 34,7222 -> Mantiza = 34, fraction = 0.7222
+		// Mantiza = 34 = 0x22, fraction = 16 * 0.7222 = 11,55 = C
+		//Configurando el Baudrate generator para una velocidad de 115200bps
+		ptrUsartHandler->ptrUSARTx->BRR = 0x22C;
+
 	}
 
 	else if(ptrUsartHandler->USART_Config.USART_baudrate == USART_BAUDRATE_115200){
@@ -193,6 +203,29 @@ void USART_Config(USART_Handler_t *ptrUsartHandler){
 		ptrUsartHandler->ptrUSARTx->CR1 &= ~USART_CR1_RXNEIE;
 	}
 
+	//Habilitamos las interrupciones de  Transmisión
+	if (ptrUsartHandler->USART_Config.USART_enableInTx == USART_INTERRUPT_TX_ENABLE){
+		ptrUsartHandler->ptrUSARTx->CR1 |= USART_CR1_TXEIE;;
+
+		if(ptrUsartHandler->ptrUSARTx == USART1){
+					// Activando en NVIC para la interrupción del USART1
+					__NVIC_EnableIRQ(USART1_IRQn);
+		}
+		else if(ptrUsartHandler->ptrUSARTx == USART2){
+					// Activando en NVIC para la interrupción del USART2
+					__NVIC_EnableIRQ(USART2_IRQn);
+		}
+		else if(ptrUsartHandler->ptrUSARTx == USART6){
+				// Activando en NVIC para la interrupción del USART6
+					__NVIC_EnableIRQ(USART6_IRQn);
+		}
+		else{
+				__NOP();
+		}
+	}else{
+		ptrUsartHandler->ptrUSARTx->CR1 &= ~USART_CR1_TXEIE;
+	}
+
 	__enable_irq();
 }
 
@@ -234,16 +267,40 @@ uint8_t getRxData(void){
 
 void USART2_IRQHandler(void){
 
-	if(USART2->SR & USART_SR_RXNE){
-		auxRxData = (uint8_t) USART2->DR;
+	USART_Handler_t *ptrUSARTHandler = {0};
+
+	if(!(USART2->SR & USART_SR_PE)){
+
+		if(USART2->SR & USART_SR_RXNE){
+			auxRxData = (uint8_t) USART2->DR;
+			usart2Rx_Callback();
+		}
+
+	}else{
+		USART2->SR &= ~(USART_SR_PE);
+		writeMsg(ptrUSARTHandler, "Mensaje corrompido, enviar de nuevo");
+	}
+	if(USART2->SR & USART_SR_TXE){
 		usart2Rx_Callback();
 	}
 }
 
 void USART1_IRQHandler(void){
 
-	if(USART1->SR & USART_SR_RXNE){
-		auxRxData = (uint8_t) USART1->DR;
+	USART_Handler_t *ptrUSARTHandler = {0};
+
+	if(!(USART1->SR & USART_SR_PE)){
+
+		if(USART1->SR & USART_SR_RXNE){
+			auxRxData = (uint8_t) USART1->DR;
+			usart6Rx_Callback();
+		}
+
+	}else{
+		USART1->SR &= ~(USART_SR_PE);
+		writeMsg(ptrUSARTHandler, "Mensaje corrompido, enviar de nuevo");
+	}
+	if(USART1->SR & USART_SR_TXE){
 		usart1Rx_Callback();
 	}
 
@@ -251,8 +308,19 @@ void USART1_IRQHandler(void){
 
 void USART6_IRQHandler(void){
 
-	if(USART6->SR & USART_SR_RXNE){
-		auxRxData = (uint8_t) USART6->DR;
+	USART_Handler_t *ptrUSARTHandler = {0};
+	if(!(USART6->SR & USART_SR_PE)){
+
+		if(USART6->SR & USART_SR_RXNE){
+			auxRxData = (uint8_t) USART6->DR;
+			usart6Rx_Callback();
+		}
+
+	}else{
+		USART6->SR &= ~(USART_SR_PE);
+		writeMsg(ptrUSARTHandler, "Mensaje corrompido, enviar de nuevo");
+	}
+	if(USART6->SR & USART_SR_TXE){
 		usart6Rx_Callback();
 	}
 }

@@ -7,8 +7,12 @@
 C_SRCS += \
 ../Src/AdcDriver.c \
 ../Src/BasicTimer.c \
-../Src/ExtiDriver.c \
+../Src/EXTIDriver.c \
 ../Src/GPIOxDriver.c \
+../Src/I2CDriver.c \
+../Src/OLEDDriver.c \
+../Src/PwmDriver.c \
+../Src/RTCDriver.c \
 ../Src/USARTxDriver.c \
 ../Src/syscalls.c \
 ../Src/sysmem.c 
@@ -16,8 +20,12 @@ C_SRCS += \
 OBJS += \
 ./Src/AdcDriver.o \
 ./Src/BasicTimer.o \
-./Src/ExtiDriver.o \
+./Src/EXTIDriver.o \
 ./Src/GPIOxDriver.o \
+./Src/I2CDriver.o \
+./Src/OLEDDriver.o \
+./Src/PwmDriver.o \
+./Src/RTCDriver.o \
 ./Src/USARTxDriver.o \
 ./Src/syscalls.o \
 ./Src/sysmem.o 
@@ -25,8 +33,12 @@ OBJS += \
 C_DEPS += \
 ./Src/AdcDriver.d \
 ./Src/BasicTimer.d \
-./Src/ExtiDriver.d \
+./Src/EXTIDriver.d \
 ./Src/GPIOxDriver.d \
+./Src/I2CDriver.d \
+./Src/OLEDDriver.d \
+./Src/PwmDriver.d \
+./Src/RTCDriver.d \
 ./Src/USARTxDriver.d \
 ./Src/syscalls.d \
 ./Src/sysmem.d 

@@ -32,7 +32,9 @@ void BasicTimer_Config(BasicTimer_Handler_t *ptrBTimerHandler){
 	__disable_irq();
 
 	/* 1. Activar la señal de reloj del periférico requerido */
-	if(ptrBTimerHandler->ptrTIMx == TIM2){
+	if (ptrBTimerHandler->ptrTIMx == TIM1){
+		RCC->APB2ENR |= RCC_APB2ENR_TIM1EN;
+	}else if(ptrBTimerHandler->ptrTIMx == TIM2){
 		// Registro del RCC que nos activa la señal de reloj para el TIM2
 		RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
 	}
@@ -81,6 +83,7 @@ void BasicTimer_Config(BasicTimer_Handler_t *ptrBTimerHandler){
 		/* 3b. Configuramos el Auto-reload. Este es el "limite" hasta donde el CNT va a contar
 		 * En modo descendente, con numero positivos, cual es el minimi valor al que ARR puede llegar*/
 		/* Escriba codigo aca */
+		ptrBTimerHandler->ptrTIMx->ARR = ptrBTimerHandler->TIMx_Config.TIMx_period - 1;
 
 		/* 3c. Reiniciamos el registro counter
 		 * Este es el valor con el que el counter comienza */
