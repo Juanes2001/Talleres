@@ -2,7 +2,7 @@
  * RTCDriver.h
  *
  *  Created on: 5/11/2022
- *      Author: ALEJANDRA MARIA
+ *      Author: Juan Esteban Rodriguez Ochoa
  */
 
 #ifndef RTCDRIVER_H_
@@ -44,4 +44,5 @@ typedef struct
 void Rtc_Congif (RTC_Handler_t *ptrHandlerRtc);
 void Rtc_BDC_Convertion (RTC_Handler_t *ptrHandlerRtc);
 uint8_t *getDate(void);
+void shutDownClock (void);
 

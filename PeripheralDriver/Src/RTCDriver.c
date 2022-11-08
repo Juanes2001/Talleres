@@ -40,7 +40,7 @@ uint8_t actualTime[7];
 
 void Rtc_Congif (RTC_Handler_t *ptrHandlerRtc){
 	//Activamos el PWR parapoder desactivar su sistema de bloqueo en el RTC
-	RCC->APB1ENR = RCC_APB1ENR_PWREN;
+	RCC->APB1ENR |= RCC_APB1ENR_PWREN;
 	//Desactivamos la proteccion de PWR para modificar registros
 	PWR->CR |= PWR_CR_DBP;
 
@@ -111,7 +111,6 @@ void Rtc_Congif (RTC_Handler_t *ptrHandlerRtc){
 	PWR->CR &= ~ PWR_CR_DBP;
 
 	RTC->CR &= ~RTC_CR_BYPSHAD;
-	RTC->WPR = (0xFF); // Key Lock write protection
 
 
 
@@ -164,4 +163,8 @@ uint8_t *getDate(void){
 	actualTime[6] = Year;
 
 	return actualTime;
+}
+
+void shutDownClock (void){
+	RCC->BDCR &= ~RCC_BDCR_LSEON;
 }

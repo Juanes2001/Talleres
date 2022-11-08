@@ -1,3 +1,4 @@
+"./Src/MainExamen.o"
 "./Src/main.o"
 "./Src/mainEstudiantesP2.o"
 "./Src/syscalls.o"
